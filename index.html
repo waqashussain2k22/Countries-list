@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Countries information</h1>
+    <table border="2" id="countryData" style="text-align: center;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Capital</th>
+                <th>Population</th>
+                <th>Area (km²)</th>
+                <th>Flag</th>
+                <th> language</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table body will be populated dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        fetch(`https://restcountries.com/v3.1/all`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                const countryDataContainer = document.getElementById('countryData');
+                data.forEach(function(country) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${country.name.common}</td>
+                        <td>${country.capital}</td>
+                        <td>${country.population}</td>
+                        <td>${country.area}</td>
+                        <td><img src="${country.flags.png}" alt="Flag" style="width: 50px; height: auto;"></td>
+                        <td>${Object.values(country.languages).join(', ')}</td>
+
+                    `;
+                    countryDataContainer.appendChild(row);
+                });
+            })
+            .catch(function(error) {
+                console.error('Error fetching country data:', error);
+            });
+    </script>
+</body>
+</html>
